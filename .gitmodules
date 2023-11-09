@@ -1,0 +1,6 @@
+[submodule "medpoisk-client"]
+	path = medpoisk-client
+	url = https://github.com/honanaipr/medpoisk-client.git
+[submodule "medpoisk-server"]
+	path = medpoisk-server
+	url = https://github.com/honanaipr/medpoisk-server.git
