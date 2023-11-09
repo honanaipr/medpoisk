@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+  app:
+    depends_on:
+      - db
+    build: .
+    environment:
+      - SQLALCHEMY_DATABASE_URL=postgresql://postgres:password@db/medpoisk
+    ports:
+      - 80:80
+  
+  db:
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - ./data:/var/lib/postgresql/data:rw
+      - ./medpoisk-server/medpoisk.sql:/docker-entrypoint-initdb.d/medpoisk.sql
+  
+  pgadmin:
+    image: "dpage/pgadmin4:latest"
+    depends_on:
+      - db
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+    ports:
+      - 5050:80
