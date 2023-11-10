@@ -8,6 +8,7 @@ services:
       - SQLALCHEMY_DATABASE_URL=postgresql://postgres:password@db/medpoisk
     ports:
       - 80:80
+    restart: always
   
   db:
     image: "postgres:latest"
@@ -16,6 +17,7 @@ services:
     volumes:
       - ./data:/var/lib/postgresql/data:rw
       - ./medpoisk-server/medpoisk.sql:/docker-entrypoint-initdb.d/medpoisk.sql
+    restart: always
   
   pgadmin:
     image: "dpage/pgadmin4:latest"
@@ -26,3 +28,4 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=password
     ports:
       - 5050:80
+    restart: always
