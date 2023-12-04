@@ -3,11 +3,16 @@ services:
   app:
     depends_on:
       - db
-    build: .
+    build: 
+      context: .
     environment:
-      - SQLALCHEMY_DATABASE_URL=postgresql://postgres:password@db/medpoisk
+      - SQLALCHEMY_DB_URL=postgresql://postgres:password@db/medpoisk
+      - PICTURES_DIR=/var/pictures
+      - PORT=7325
+    volumes:
+      - images:/var/pictures
     ports:
-      - 80:80
+      - 7325:7325
     restart: always
   
   db:
@@ -15,17 +20,22 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
     volumes:
-      - ./data:/var/lib/postgresql/data:rw
-      - ./medpoisk-server/medpoisk.sql:/docker-entrypoint-initdb.d/medpoisk.sql
+      - psql-data:/var/lib/postgresql/data:rw
+      - ./medpoisk-server/create_db.sql:/docker-entrypoint-initdb.d/1-create_db.sql:ro
+      - ./medpoisk-server/migration.sql:/docker-entrypoint-initdb.d/2-migration.sql:ro
     restart: always
   
-  pgadmin:
-    image: "dpage/pgadmin4:latest"
-    depends_on:
-      - db
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=user@domain.com
-      - PGADMIN_DEFAULT_PASSWORD=password
-    ports:
-      - 5050:80
-    restart: always
+  # pgadmin:
+  #   image: "dpage/pgadmin4:latest"
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=user@domain.com
+  #     - PGADMIN_DEFAULT_PASSWORD=password
+  #   ports:
+  #     - 5050:80
+  #   restart: always
+
+volumes:
+  images:
+  psql-data:
