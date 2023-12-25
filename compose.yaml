@@ -17,12 +17,9 @@ services:
       - db
     build: 
       context: medpoisk-server/
-      args:
-        - STATIC_PATH=../medpoisk-client/dist
     environment:
       - SQLALCHEMY_DB_URL=postgresql://postgres:password@db/medpoisk
       - PICTURES_DIR=/var/pictures
-      - STATIC_PATH=static
       - PORT=7325
     volumes:
       - pictures:/var/pictures
@@ -38,8 +35,8 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - psql-data:/var/lib/postgresql/data:rw
-      - ./medpoisk-server/create_db.sql:/docker-entrypoint-initdb.d/1-create_db.sql:ro
-      - ./medpoisk-server/migration.sql:/docker-entrypoint-initdb.d/2-migration.sql:ro
+      - ./medpoisk-server/scripts/create_db.sql:/docker-entrypoint-initdb.d/1-create_db.sql:ro
+      - ./medpoisk-server/scripts/inflate_db.sql:/docker-entrypoint-initdb.d/2-inflate_db.sql:ro
     networks:
       - loc
     restart: always
